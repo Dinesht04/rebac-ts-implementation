@@ -10,7 +10,7 @@ actor User{
 
 
 resource Institution{
-  roles = ["doctor","nurse","admin","patient"];  
+  roles = ["nurse","admin"];  
 }
 
 resource Case{
@@ -26,6 +26,7 @@ resource Case{
 
   "edit" if "editor";
   "view" if "viewer";
+  "viewer" if "editor";
 
   # admin permissions
   "editor" if "admin" on "institution";
@@ -39,6 +40,9 @@ resource Case{
   #doctor permission
   "editor" if "doctor";
 
+  # nurse permissions
+  "editor" if "nurse" on "institution";
+
 
 }
 
@@ -50,14 +54,17 @@ resource Treatment{
 
   relations = {
     case: Case,
-    physician: Physician,
-    patient: User
+    patient: User,
+    physician: Physician
   };
 
   "edit" if "editor";
   "view" if "viewer";
+  "viewer" if "editor";
 
   "editor" if "editor" on "case";
+  "viewer" if "editor";
+
 
   "editor" if "physician";
 
